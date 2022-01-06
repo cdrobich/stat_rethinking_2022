@@ -17,7 +17,10 @@ plot(p_grid)
 # uniform prior distribution = repeat 1
 
 prob_p <- rep(1,1000) 
-plot(prob_p)
+prob_w <- dbeta(p_grid, 3, 1) # a wet world 
+?dbeta
+
+plot(prob_w)
 
 # probably of data
 # 6 W of 9 tosses, with all the possible explanations (p_grid)
