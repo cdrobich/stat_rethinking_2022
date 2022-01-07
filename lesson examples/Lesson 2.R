@@ -44,4 +44,12 @@ posterior <- posterior / sum(posterior)
 plot(posterior)
 
 
+# sample from posterior
+
+samples <- sample(p_grid, prob = posterior, size = 1e4,
+                  replace = TRUE)
+plot(samples)
+
+w <- rbinom(1e4, size = 9, prob = samples)
+
 
