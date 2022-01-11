@@ -53,8 +53,11 @@ q_89 <- quantile(posterior2, 0.9)
 #89% 
 #0.002860699 
 
-plot(posterior2 * prior2, type = "l")
-
+plot(posterior2 ~ p_grid, type = "l",
+     xlab = "Probability of water",
+     ylab = "Posterior probability")
+abline(v = 0.002860699, col = "red")
+text(0.15, 0.0025, "89%")
 
 # HPDI (highest posterior density interval)
 

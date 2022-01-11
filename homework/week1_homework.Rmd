@@ -48,9 +48,19 @@ mtext("W,W,W,W,L,L")
 
 
 ```{r, include = TRUE}
-
 quantile(posterior2, 0.89)
+```
 
+```{r, echo = FALSE}
+plot(posterior2 ~ p_grid, type = "l",
+     xlab = "Probability of water",
+     ylab = "Posterior probability")
+abline(v = 0.002860699, col = "red")
+text(0.05, 0.0025, "89%")
+```
+
+
+```{r, include = TRUE}
 HPDI(posterior2, 0.5)
 HPDI(posterior2, 0.7)
 HPDI(posterior2, 0.89)
@@ -64,3 +74,7 @@ HPDI(posterior2, 0.5) < quantile(posterior2, 0.89)
 
 ```
 
+It looks like the 89% interval contains nearly all of the data (is wider), compared to the 
+HPDI values (though I am not confident in my approach). The issue with these approaches
+is that they do not give information about the shape of the posterior distribution,
+which assumes there is no land on Earth. 
