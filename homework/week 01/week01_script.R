@@ -9,8 +9,7 @@ library(rethinking)
 # construct the posterior distribution, using grid approx., and same flat prior.
 
 # grid approximation
-p_grid <- seq(from = 0, to = 1,
-              length.out = 1000) 
+p_grid <- seq(from = 0, to = 1, length.out = 1000) 
 
 # uniform prior
 prob_p <- rep(1,1000) 
@@ -26,6 +25,12 @@ posterior <- prob_data * prob_p
 posterior <- posterior/sum(posterior)
 plot(posterior)
 
+#left this step out in my homework
+set.seed(100)
+samples <- sample(p_grid, prob = posterior, size = 1e4, replace = TRUE)
+
+plot(samples)
+dens(samples)
 
 # 2. Data are 4 water and 2 land. Computer posterior but this time use a prior
 # that is zero below p = 0.5 and a constant above p = 0.5. This corresponds
