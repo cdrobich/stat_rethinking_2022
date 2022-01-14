@@ -13,19 +13,24 @@ library(rethinking)
 ### Question 1. Suppose the globe tossing data (Chapter 2) had turned out to be 4 water and 11 land. Construct the posterior distribution, using grid approximation. Use the same flat prior as in the book.
 
 ```{r, include=TRUE}
-p_grid <- seq(from = 0, to = 1,
-              length.out = 1000) 
-prob_p <- rep(1,1000) 
+
+p_grid <- seq(from = 0, to = 1,length.out = 1000) 
+prior <- rep(1,1000) 
 prob_data <- dbinom(4, 15, prob = p_grid)
 
-posterior <- prob_data * prob_p
+posterior <- prob_data * prior
 posterior <- posterior/sum(posterior)
+
+set.seed(100)
+
+samples <- sample(p_grid, prob = posterior, size = 1e4, replace = TRUE)
+
 ```
 
 ```{r, echo = FALSE}
-plot(posterior ~ p_grid, type = "l",
-     xlab = "Probability of water",
-     ylab = "Posterior probability")
+
+dens(samples)
+
 ```
 ### Question 2. Now suppose the data are 4 water and 2 land. Compute the posterior again, but this time use a prior that is zero below p = 0.5 and a constant above p =0.5. This corresponds to prior information that a majority of the Earth’s surface is water.
 
@@ -35,46 +40,35 @@ p_likelihood <- dbinom(4, 6, prob = p_grid)
 
 posterior2 <- p_likelihood * prior2
 posterior2 <- posterior2/sum(posterior2)
+
+set.seed(100)
+
+samples2 <- sample(p_grid, posterior2, size = 1e4, replace = TRUE)
+
+
 ```
 
 ```{r, echo = FALSE}
-plot(posterior2 ~ p_grid, type = "l",
-     xlab = "Probability of water",
-     ylab = "Posterior probability")
-mtext("W,W,W,W,L,L")
+
+dens(samples2)
+
 ```
 
 ### Question 3.  For the posterior distribution from 2, compute 89% percentile and HPDI intervals. Compare the widths of these intervals. Which is wider? Why? If you had only the information in the interval, what might you misunderstand about the shape of the posterior distribution?
 
 
 ```{r, include = TRUE}
-quantile(posterior2, 0.89)
+
+p.PI <- PI(samples2)
+p.HDPI <- HPDI(samples2)
+
+p.HDPI < p.PI
+
 ```
 
 ```{r, echo = FALSE}
-plot(posterior2 ~ p_grid, type = "l",
-     xlab = "Probability of water",
-     ylab = "Posterior probability")
-abline(v = 0.002860699, col = "red")
-text(0.05, 0.0025, "89%")
-```
 
-
-```{r, include = TRUE}
-HPDI(posterior2, 0.5)
-HPDI(posterior2, 0.7)
-HPDI(posterior2, 0.89)
+dens(samples, show.HPDI = TRUE)
 
 ```
 
-
-```{r, include = TRUE}
-
-HPDI(posterior2, 0.5) < quantile(posterior2, 0.89)
-
-```
-
-It looks like the 89% interval contains nearly all of the data (is wider), compared to the 
-HPDI values (though I am not confident in my approach). The issue with these approaches
-is that they do not give information about the shape of the posterior distribution,
-which assumes there is no land on Earth. 
