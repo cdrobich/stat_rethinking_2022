@@ -1,5 +1,6 @@
 
 # Week 1 Homework ---------------------------------------------------------
+library(rethinking)
 
 # Due Friday January 14
 # Review EASY problems at the end of Chapters 1, 2, 3
@@ -64,7 +65,7 @@ text(0.15, 0.0025, "89%")
 # narrowest interval containing the specified probability mass
 hdpi <- HPDI(posterior2, prob = 0.7)
 
-
+dens(posterior2, show.HPDI = TRUE)
 
 
 
